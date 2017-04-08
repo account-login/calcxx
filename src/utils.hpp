@@ -6,7 +6,9 @@
 #include <iostream>
 
 
-using namespace std;
+using std::string;
+using std::to_string;
+using std::ostream;
 
 
 #define REPR(T) \
@@ -16,6 +18,35 @@ using namespace std;
         return os; \
     } \
     inline string repr(const T &value)
+
+
+inline string repr(int value) {
+    return to_string(value);
+}
+inline string repr(long value) {
+    return to_string(value);
+}
+inline string repr(long long value) {
+    return to_string(value);
+}
+inline string repr(unsigned value) {
+    return to_string(value);
+}
+inline string repr(unsigned long value) {
+    return to_string(value);
+}
+inline string repr(unsigned long long value) {
+    return to_string(value);
+}
+inline string repr(float value) {
+    return to_string(value);
+}
+inline string repr(double value) {
+    return to_string(value);
+}
+inline string repr(long double value) {
+    return to_string(value);
+}
 
 
 #endif // UTILS_HPP

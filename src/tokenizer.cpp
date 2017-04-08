@@ -1,31 +1,22 @@
-#include <typeinfo>
+#include <memory>
 #include "tokenizer.h"
 
 
-void SourcePos::add_char(char ch) {
-    if (this->last_newline) {
-        this->lineno++;
-        this->rowno = 0;
-    } else {
-        this->rowno++;
-    }
-
-    this->last_newline = ch == '\n';
-}
+using std::make_shared;
 
 
-tuple<TokenPtr, bool, State*> InitState::feed(char ch) {
+tuple<Token::Ptr, bool, State*> InitState::feed(char ch) {
 #define SINGLE_CHAR(tok_ch, tok_type) \
     else if (ch == tok_ch) { \
-        TokenPtr tok = make_shared<Token>(TokenType::tok_type); \
+        Token::Ptr tok = make_shared<Token>(TokenType::tok_type); \
         return make_tuple(tok, true, this); \
     }
 
     if (ch == '\0') {
-        TokenPtr tok = make_shared<Token>(TokenType::END);
+        Token::Ptr tok = make_shared<Token>(TokenType::END);
         return make_tuple(tok, true, this);
     } else if (isspace(ch)) {
-        return make_tuple(TokenPtr(), true, this);
+        return make_tuple(Token::Ptr(), true, this);
     }
     SINGLE_CHAR('+', PLUS)
     SINGLE_CHAR('-', MINUS)
@@ -34,7 +25,7 @@ tuple<TokenPtr, bool, State*> InitState::feed(char ch) {
     SINGLE_CHAR('(', LPAR)
     SINGLE_CHAR(')', RPAR)
     else if (isdigit(ch)) {
-        return make_tuple(TokenPtr(), false, new NumberState);
+        return make_tuple(Token::Ptr(), false, new NumberState);
     } else {
         throw TokenizerError();
     }
@@ -43,20 +34,20 @@ tuple<TokenPtr, bool, State*> InitState::feed(char ch) {
 }
 
 
-tuple<TokenPtr, bool, State*> NumberState::feed(char ch) {
+tuple<Token::Ptr, bool, State*> NumberState::feed(char ch) {
     if (isdigit(ch)) {
         this->digits.push_back(ch);
-        return make_tuple(TokenPtr(), true, this);
+        return make_tuple(Token::Ptr(), true, this);
     } else {
         int64_t value = atoll(this->digits.data());
-        TokenPtr tok = make_shared<TokenInt>(value);
+        Token::Ptr tok = make_shared<TokenInt>(value);
         return make_tuple(tok, false, new InitState);
     }
 }
 
 
 void Tokenizer::feed(char ch) {
-    TokenPtr tok;
+    Token::Ptr tok;
     bool eaten = false;
     State *new_state;
 
@@ -91,12 +82,12 @@ void Tokenizer::feed(char ch) {
 }
 
 
-TokenPtr Tokenizer::pop() {
+Token::Ptr Tokenizer::pop() {
     if (!this->tokens.empty()) {
-        TokenPtr ret = this->tokens.front();
+        Token::Ptr ret = this->tokens.front();
         this->tokens.pop();
         return ret;
     } else {
-        return TokenPtr();
+        return Token::Ptr();
     }
 }
