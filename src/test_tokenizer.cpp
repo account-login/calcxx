@@ -9,15 +9,15 @@
 using namespace std;
 
 
-vector<TokenPtr> get_tokens(const string &str) {
+vector<Token::Ptr> get_tokens(const string &str) {
     Tokenizer tokenizer;
     for (char ch : str) {
         tokenizer.feed(ch);
     }
     tokenizer.feed('\0');
 
-    vector<TokenPtr> ans;
-    for (TokenPtr tok = tokenizer.pop(); tok; tok = tokenizer.pop()) {
+    vector<Token::Ptr> ans;
+    for (Token::Ptr tok = tokenizer.pop(); tok; tok = tokenizer.pop()) {
         ans.push_back(tok);
     }
 
@@ -28,7 +28,7 @@ vector<TokenPtr> get_tokens(const string &str) {
 
 
 TEST_CASE("Test Tokenizer basic") {
-    vector<TokenPtr> tokens;
+    vector<Token::Ptr> tokens;
     tokens = get_tokens("+");
     CHECK(tokens.size() == 1);
     CHECK(tokens[0]->type == TokenType::PLUS);
@@ -50,7 +50,7 @@ TEST_CASE("Test Tokenizer basic") {
 
 
 void check_tokens_pos(const string &str, const vector<pair<SourcePos, SourcePos>> &positions) {
-    vector<TokenPtr> tokens = get_tokens(str);
+    vector<Token::Ptr> tokens = get_tokens(str);
     REQUIRE(tokens.size() == positions.size());
     for (size_t i = 0; i < tokens.size(); i++) {
         CHECK(tokens[i]->start == positions[i].first);
@@ -60,7 +60,7 @@ void check_tokens_pos(const string &str, const vector<pair<SourcePos, SourcePos>
 
 
 TEST_CASE("Test Tokenizer source position") {
-    vector<TokenPtr> tokens;
+    vector<Token::Ptr> tokens;
 
     check_tokens_pos("+", {{{0, 0}, {0, 0}}});
     check_tokens_pos("++", {
@@ -82,7 +82,7 @@ TEST_CASE("Test Tokenizer source position") {
 
 TEST_CASE("Test Tokenizer single char token") {
     string str = "+-*/()";
-    vector<TokenPtr> tokens = get_tokens(str);
+    vector<Token::Ptr> tokens = get_tokens(str);
     REQUIRE(tokens.size() == str.size());
     for (size_t i = 0; i < tokens.size(); i++) {
         CHECK(tokens[i]->type == static_cast<TokenType>(str[i]));

@@ -67,15 +67,15 @@ TEST_CASE("Test operator_div") {
 }
 
 
-vector<TokenPtr> get_tokens(const string &str) {
+vector<Token::Ptr> get_tokens(const string &str) {
     Tokenizer tokenizer;
     for (char ch : str) {
         tokenizer.feed(ch);
     }
     tokenizer.feed('\0');
 
-    vector<TokenPtr> ans;
-    for (TokenPtr tok = tokenizer.pop(); tok; tok = tokenizer.pop()) {
+    vector<Token::Ptr> ans;
+    for (Token::Ptr tok = tokenizer.pop(); tok; tok = tokenizer.pop()) {
         ans.push_back(tok);
     }
     return ans;
