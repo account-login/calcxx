@@ -17,6 +17,7 @@
 using std::tie;
 using std::to_string;
 using std::tuple;
+using std::unique_ptr;
 using std::shared_ptr;
 using std::queue;
 
@@ -55,7 +56,7 @@ public:
     TokenPtr pop();
 
 private:
-    shared_ptr<State> state;
+    unique_ptr<State> state;
     queue<TokenPtr> tokens;
     SourcePos start_pos = SourcePos();
     SourcePos prev_pos;
