@@ -92,6 +92,7 @@ Token::Ptr eval_string_token_by_token(const string &input) {
             calc.feed(tok);
         }
     }
+    CHECK(calc.is_finished());
     return calc.get_result();
 }
 

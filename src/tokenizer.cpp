@@ -1,8 +1,10 @@
+#include <string>
 #include <memory>
 #include "tokenizer.h"
 
 
 using std::make_shared;
+using std::string;
 
 
 tuple<Token::Ptr, bool, State*> InitState::feed(char ch) {
@@ -27,7 +29,7 @@ tuple<Token::Ptr, bool, State*> InitState::feed(char ch) {
     else if (isdigit(ch)) {
         return make_tuple(Token::Ptr(), false, new NumberState);
     } else {
-        throw TokenizerError();
+        throw TokenizerError("Unknown char: " + string(1, ch));
     }
 
 #undef SINGLE_CHAR
@@ -90,4 +92,11 @@ Token::Ptr Tokenizer::pop() {
     } else {
         return Token::Ptr();
     }
+}
+
+void Tokenizer::reset() {
+    this->set_new_state(new InitState);
+    this->start_pos = SourcePos();
+    this->cur_pos = SourcePos();
+    queue<Token::Ptr>().swap(this->tokens);
 }

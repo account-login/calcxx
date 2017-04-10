@@ -75,6 +75,20 @@ void TokensEvaluator::check_result() {
     }
 }
 
+Token::Ptr TokensEvaluator::get_result() {
+    if (!this->is_finished()) {
+        throw EvalError("Not finished");
+    }
+    Token::Ptr tok = this->values.top();
+    this->values.pop();
+    return tok;
+}
+
+void TokensEvaluator::reset() {
+    stack<Token::Ptr>().swap(this->ops);
+    stack<Token::Ptr>().swap(this->values);
+}
+
 
 bool operator_lt(Token::Ptr op1, Token::Ptr op2) {
     try {

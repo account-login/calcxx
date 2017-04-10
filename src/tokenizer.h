@@ -14,6 +14,7 @@
 #include "utils.hpp"
 
 
+using std::string;
 using std::tie;
 using std::to_string;
 using std::tuple;
@@ -21,7 +22,10 @@ using std::unique_ptr;
 using std::queue;
 
 
-class TokenizerError : public BaseException {};
+class TokenizerError : public BaseException {
+public:
+    TokenizerError(const string &msg) : BaseException(msg) {}
+};
 
 
 class State {
@@ -50,6 +54,8 @@ public:
     Tokenizer() : state(new InitState()) {}
     void feed(char ch);
     Token::Ptr pop();
+
+    void reset();
 
 private:
     unique_ptr<State> state;

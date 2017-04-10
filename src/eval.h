@@ -50,11 +50,8 @@ bool operator_lt(Token::Ptr op1, Token::Ptr op2);
 class TokensEvaluator {
 public:
     void feed(Token::Ptr tok);
-
-    Token::Ptr get_result() const {
-        assert(this->is_finished());
-        return this->values.top();
-    };
+    Token::Ptr get_result();;
+    void reset();
 
     bool is_finished() const {
         return this->ops.size() == 0 && this->values.size() == 1;
