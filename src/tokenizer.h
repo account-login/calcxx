@@ -58,7 +58,7 @@ private:
     SourcePos prev_pos;
     SourcePos cur_pos = SourcePos();
 
-    inline void set_new_state(State *new_state) {
+    void set_new_state(State *new_state) {
         if (new_state != this->state.get()) {
             this->state.reset(new_state);
         }

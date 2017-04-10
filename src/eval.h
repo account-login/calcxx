@@ -51,12 +51,12 @@ class TokensEvaluator {
 public:
     void feed(Token::Ptr tok);
 
-    inline Token::Ptr get_result() const {
+    Token::Ptr get_result() const {
         assert(this->is_finished());
         return this->values.top();
     };
 
-    inline bool is_finished() const {
+    bool is_finished() const {
         return this->ops.size() == 0 && this->values.size() == 1;
     }
 

@@ -19,22 +19,22 @@ private:
     bool last_newline = true;
 
 public:
-    inline SourcePos(int lineno, int rowno)
+    SourcePos(int lineno, int rowno)
         : lineno(lineno), rowno(rowno)
     {}
 
     // invalid
-    inline SourcePos() : lineno(-1), rowno(-1) {}
+    SourcePos() : lineno(-1), rowno(-1) {}
 
-    inline bool operator == (const SourcePos &other) const {
+    bool operator == (const SourcePos &other) const {
         return tie(this->lineno, this->rowno) == tie(other.lineno, other.rowno);
     }
 
-    inline bool operator != (const SourcePos &other) const {
+    bool operator != (const SourcePos &other) const {
         return !(*this == other);
     }
 
-    inline bool is_valid() const {
+    bool is_valid() const {
         return this->lineno >= 0 && this->rowno >= 0;
     }
 

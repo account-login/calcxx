@@ -43,19 +43,19 @@ struct Token {
 
     explicit Token(TokenType type) : type(type) {}
 
-    virtual inline bool is_op() const {
+    virtual bool is_op() const {
         return true;
     }
 
-    virtual inline bool operator==(const Token &other) const {
+    virtual bool operator==(const Token &other) const {
         return this->type == other.type;
     }
 
-    virtual inline string _token_name() const {
+    virtual string _token_name() const {
         return "Token:" + string(1, static_cast<char>(this->type));
     }
 
-    virtual inline string _repr_value() const {
+    virtual string _repr_value() const {
         return "";
     }
 };
