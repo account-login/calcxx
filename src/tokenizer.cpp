@@ -1,10 +1,12 @@
-#include <string>
 #include <memory>
+#include <string>
+#include <tuple>
 #include "tokenizer.h"
 
 
 using std::make_shared;
 using std::string;
+using std::tie;
 
 
 tuple<Token::Ptr, bool, State*> InitState::feed(char ch) {
@@ -99,4 +101,10 @@ void Tokenizer::reset() {
     this->start_pos = SourcePos();
     this->cur_pos = SourcePos();
     queue<Token::Ptr>().swap(this->tokens);
+}
+
+void Tokenizer::set_new_state(State *new_state) {
+    if (new_state != this->state.get()) {
+        this->state.reset(new_state);
+    }
 }

@@ -3,12 +3,10 @@
 
 
 #include <string>
-#include <tuple>
 #include "utils.hpp"
 
 
 using std::to_string;
-using std::tie;
 
 
 struct SourcePos {
@@ -26,18 +24,9 @@ public:
     // invalid
     SourcePos() : lineno(-1), rowno(-1) {}
 
-    bool operator == (const SourcePos &other) const {
-        return tie(this->lineno, this->rowno) == tie(other.lineno, other.rowno);
-    }
-
-    bool operator != (const SourcePos &other) const {
-        return !(*this == other);
-    }
-
-    bool is_valid() const {
-        return this->lineno >= 0 && this->rowno >= 0;
-    }
-
+    bool operator==(const SourcePos &other) const;
+    bool operator!=(const SourcePos &other) const;
+    bool is_valid() const;
     void add_char(char ch);
 };
 

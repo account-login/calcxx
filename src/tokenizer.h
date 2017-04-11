@@ -15,8 +15,6 @@
 
 
 using std::string;
-using std::tie;
-using std::to_string;
 using std::tuple;
 using std::unique_ptr;
 using std::queue;
@@ -54,7 +52,6 @@ public:
     Tokenizer() : state(new InitState()) {}
     void feed(char ch);
     Token::Ptr pop();
-
     void reset();
 
 private:
@@ -64,11 +61,7 @@ private:
     SourcePos prev_pos;
     SourcePos cur_pos = SourcePos();
 
-    void set_new_state(State *new_state) {
-        if (new_state != this->state.get()) {
-            this->state.reset(new_state);
-        }
-    }
+    void set_new_state(State *new_state);
 };
 
 

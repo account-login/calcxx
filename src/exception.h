@@ -16,10 +16,7 @@ protected:
 
 public:
     BaseException(const string &msg = "BaseException") : msg(msg) {}
-
-    virtual inline const char *what() const throw() {
-        return this->msg.data();
-    }
+    virtual const char *what() const throw();
 };
 
 
