@@ -51,6 +51,10 @@ struct Token {
         return this->type == other.type;
     }
 
+    virtual bool operator!=(const Token &other) const {
+        return !(*this == other);
+    }
+
     virtual string _token_name() const {
         return "Token:" + string(1, static_cast<char>(this->type));
     }
