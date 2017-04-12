@@ -16,9 +16,10 @@ using std::vector;
 
 struct Node {
     typedef shared_ptr<Node> Ptr;
+    typedef vector<Ptr> Container;
 
     Token::Ptr token;
-    vector<Node::Ptr> children;
+    Container children;
 
     Node(Token::Ptr tok) : token(tok) {}
     bool operator==(const Node &other) const;
