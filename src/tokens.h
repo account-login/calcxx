@@ -62,13 +62,21 @@ struct Token {
     virtual string _repr_value() const {
         return "";
     }
+
+    virtual string _repr_full() const {
+        return "<" + this->_token_name() + " "
+            + this->_repr_value() + " "
+            + "start=" + repr(this->start) + " end=" + repr(this->end) + ">";
+    }
+
+    virtual string _repr_short() const {
+        return this->_token_name() + ": " + this->_repr_value();
+    }
 };
 
 
 REPR(Token) {
-    return "<" + value._token_name() + " "
-    + value._repr_value() + " "
-    + "start=" + repr(value.start) + " end=" + repr(value.end) + ">";
+    return value._repr_full();
 }
 
 

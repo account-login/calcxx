@@ -3,8 +3,13 @@
 #include <iostream>
 #include <string>
 #include "eval.h"
+#include "eval_ast.h"
+#include "exception.h"
+#include "node.h"
+#include "parser.h"
 #include "sourcepos.h"
 #include "tokenizer.h"
+#include "tokens.h"
 
 
 using std::cin;
@@ -29,9 +34,32 @@ static void report_error(
 }
 
 
-int main() {
+class AstEvaluator {
+public:
+    AstEvaluator() {}
+
+    void feed(Token::Ptr tok) {
+        this->parser.feed(tok);
+    }
+
+    Token::Ptr get_result() {
+        Node::Ptr ast = this->parser.get_result();
+        return eval_node(ast);
+    }
+
+    void reset() {
+        this->parser = Parser();
+    }
+
+private:
+    Parser parser;
+};
+
+
+template<class EvaluatorType>
+void main_func() {
     Tokenizer tokenizer;
-    TokensEvaluator evaluator;
+    EvaluatorType evaluator;
 
     for (int count = 0; !cin.eof(); count++) {
         string prompt = "[" + to_string(count) + "] ";
@@ -60,8 +88,11 @@ int main() {
                         // cout << repr(*evaluator.get_result()) << endl;
                     }
                 } catch (const EvalError &exc) {
-                    // report
                     const string msg = string("EvalError: ") + exc.what();
+                    report_error(msg, tok->start, tok->end, prompt.size());
+                    goto CLEAN_UP;
+                } catch (const ParserError &exc) {
+                    const string msg = string("ParserError: ") + exc.what();
                     report_error(msg, tok->start, tok->end, prompt.size());
                     goto CLEAN_UP;
                 }
@@ -72,6 +103,19 @@ int main() {
         tokenizer.reset();
         evaluator.reset();
     }
+}
 
+
+int main(int argc, const char *argv[]) {
+    string arg = "-p";
+    if (argc > 1) {
+        arg = string(argv[1]);
+    }
+
+    if (arg == "-p") {
+        main_func<AstEvaluator>();
+    } else {
+        main_func<TokensEvaluator>();
+    }
     return 0;
 }

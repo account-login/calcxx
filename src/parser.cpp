@@ -89,8 +89,8 @@ void Parser::mismatch(vector<TokenType> expects, Token::Ptr got) {
     for (TokenType tt : expects) {
         expected_types.push_back((char)tt);
     }
-    string msg = "expected token types: " + expected_types
-        + " got " + repr(*got) + "\n";
+    string msg = "expected token types: expect '" + expected_types + "'"
+        + " got " + got->_repr_short() + "\n";
     throw ParserError(msg);
 }
 
