@@ -93,7 +93,7 @@ void TokensEvaluator::reset() {
 bool operator_lt(Token::Ptr op1, Token::Ptr op2) {
     try {
         return g_operator_precedence.at(op1->type) < g_operator_precedence.at(op2->type);
-    } catch (out_of_range) {
+    } catch (const out_of_range &) {
         throw EvalError("Operation precedence unknown");
     }
 }
