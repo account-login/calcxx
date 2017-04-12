@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include "sourcepos.h"
+#include "../sourcepos.h"
 
 
 TEST_CASE("Test SourcePos") {

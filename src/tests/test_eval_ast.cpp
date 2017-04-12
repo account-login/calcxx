@@ -1,11 +1,11 @@
 #include <string>
 #include "catch.hpp"
 
-#include "eval_ast.h"
-#include "node.h"
-#include "parser.h"
-#include "tokenizer.h"
-#include "tokens.h"
+#include "../eval_ast.h"
+#include "../node.h"
+#include "../parser.h"
+#include "../tokenizer.h"
+#include "../tokens.h"
 
 
 using std::string;
