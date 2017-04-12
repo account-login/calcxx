@@ -2,6 +2,7 @@
 #include <utility>
 #include <vector>
 #include "catch.hpp"
+
 #include "../tokens.h"
 #include "../tokenizer.h"
 

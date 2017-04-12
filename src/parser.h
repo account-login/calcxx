@@ -3,6 +3,7 @@
 
 
 #include <vector>
+
 #include "exception.h"
 #include "node.h"
 #include "tokens.h"

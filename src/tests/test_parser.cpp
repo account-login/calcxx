@@ -1,6 +1,7 @@
 #include <memory>
 #include <string>
 #include "catch.hpp"
+
 #include "../node.h"
 #include "../parser.h"
 #include "../tokenizer.h"
