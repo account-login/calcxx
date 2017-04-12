@@ -20,12 +20,6 @@ using std::unique_ptr;
 using std::queue;
 
 
-class TokenizerError : public BaseException {
-public:
-    TokenizerError(const string &msg) : BaseException(msg) {}
-};
-
-
 class State {
 public:
     virtual tuple<Token::Ptr, bool, State*> feed(char ch) = 0;

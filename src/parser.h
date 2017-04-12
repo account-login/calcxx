@@ -11,12 +11,6 @@
 using std::vector;
 
 
-class ParserError : public BaseException {
-public:
-    ParserError(const string &msg) : BaseException(msg) {};
-};
-
-
 
 /*
  * exp  -> ± xexp exp_cont
