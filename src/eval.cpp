@@ -1,23 +1,27 @@
 #include <algorithm>
 #include <cassert>
-#include <limits>
+#include <map>
 #include <memory>
 #include <stdexcept>
+#include <string>
+#include <vector>
 #include "eval.h"
+#include "operators.h"
 #include "utils.hpp"
 
 
-using std::dynamic_pointer_cast;
-using std::make_shared;
+using std::map;
 using std::out_of_range;
 using std::reverse;
+using std::string;
+using std::vector;
 
 
-static map<TokenType, OperatorFunction> g_operator_table = {
-    {TokenType::PLUS, operator_add},
-    {TokenType::MINUS, operator_sub},
-    {TokenType::MULT, operator_mult},
-    {TokenType::DIV, operator_div}
+static map<TokenType, vector<string>> g_operator_sigs = {
+    {TokenType::PLUS, {"if", "if"}},
+    {TokenType::MINUS, {"if", "if"}},
+    {TokenType::MULT, {"if", "if"}},
+    {TokenType::DIV, {"if", "if"}}
 };
 static map<TokenType, int> g_operator_precedence = {
     {TokenType::LPAR, -1},
@@ -60,9 +64,13 @@ void TokensEvaluator::eval_top() {
     assert(!this->ops.empty());
     Token::Ptr tok = this->ops.top();
     this->ops.pop();
-    auto it = g_operator_table.find(tok->type);
-    if (it != g_operator_table.end()) {
-        (it->second)(this->values);
+    auto it = g_builtin_operator_table.find(tok->type);
+    if (it != g_builtin_operator_table.end()) {
+        auto func = it->second;
+        const vector<string> &sigs = g_operator_sigs.find(tok->type)->second;
+        vector<Token::Ptr> args = extract_argument(this->values, sigs);
+        Token::Ptr result = func(args);
+        this->values.push(result);
     } else {
         throw NotImplementedOperation(string(1, static_cast<char>(tok->type)));
     }
@@ -95,82 +103,6 @@ bool operator_lt(Token::Ptr op1, Token::Ptr op2) {
         return g_operator_precedence.at(op1->type) < g_operator_precedence.at(op2->type);
     } catch (const out_of_range &) {
         throw EvalError("Operation precedence unknown");
-    }
-}
-
-
-static double token_to_num(Token::Ptr tok) {
-    auto ti = dynamic_pointer_cast<TokenInt>(tok);
-    if (ti) {
-        return ti->value;
-    } else {
-        auto tf = dynamic_pointer_cast<TokenFloat>(tok);
-        assert(tf);
-        return tf->value;
-    }
-}
-
-
-static bool is_tokens_all_int(const vector<Token::Ptr> &args) {
-    for (auto tok : args) {
-        if (!dynamic_pointer_cast<TokenInt>(tok)) {
-            return false;
-        }
-    }
-    return true;
-}
-
-
-static Token::Ptr best_num_token(double num, const vector<Token::Ptr> &args) {
-    if (is_tokens_all_int(args)) {
-        return make_shared<TokenInt>(num);
-    } else {
-        return make_shared<TokenFloat>(num);
-    }
-}
-
-
-void operator_add(stack<Token::Ptr> &stack) {
-    auto args = extract_argument(stack, {"if", "if"});
-    double v1 = token_to_num(args[0]);
-    double v2 = token_to_num(args[1]);
-    double result = v1 + v2;
-    stack.push(best_num_token(result, args));
-}
-
-
-void operator_sub(stack<Token::Ptr> &stack) {
-    auto args = extract_argument(stack, {"if", "if"});
-    double v1 = token_to_num(args[0]);
-    double v2 = token_to_num(args[1]);
-    double result = v1 - v2;
-    stack.push(best_num_token(result, args));
-}
-
-
-void operator_mult(stack<Token::Ptr> &stack) {
-    auto args = extract_argument(stack, {"if", "if"});
-    double v1 = token_to_num(args[0]);
-    double v2 = token_to_num(args[1]);
-    double result = v1 * v2;
-    stack.push(best_num_token(result, args));
-}
-
-
-void operator_div(stack<Token::Ptr> &stack) {
-    auto args = extract_argument(stack, {"if", "if"});
-    double v1 = token_to_num(args[0]);
-    double v2 = token_to_num(args[1]);
-    if (v2 == 0.0) {
-        double result = std::numeric_limits<double>::infinity();
-        stack.push(make_shared<TokenFloat>(result));
-    } else {
-        double result = v1 / v2;
-        if (is_tokens_all_int(args) && (int64_t)v1 % (int64_t)v2 == 0) {
-            stack.push(make_shared<TokenInt>(result));
-        } else {
-            stack.push(make_shared<TokenFloat>(result));
-        }
     }
 }
 

@@ -2,10 +2,6 @@
 #define CALCXX_EVAL_H
 
 
-#include <cstdint>
-#include <functional>
-#include <map>
-#include <memory>
 #include <stack>
 #include <string>
 #include <vector>
@@ -13,9 +9,6 @@
 #include "tokens.h"
 
 
-using std::function;
-using std::map;
-using std::shared_ptr;
 using std::stack;
 using std::string;
 using std::vector;
@@ -33,14 +26,6 @@ class NotImplementedOperation : public EvalError {
 public:
     NotImplementedOperation(const string &msg) : EvalError(msg) {}
 };
-
-
-using OperatorFunction = function<void(stack<Token::Ptr > &)>;
-
-void operator_add(stack<Token::Ptr> &stack);
-void operator_sub(stack<Token::Ptr> &stack);
-void operator_mult(stack<Token::Ptr> &stack);
-void operator_div(stack<Token::Ptr> &stack);
 
 
 vector<Token::Ptr> extract_argument(stack<Token::Ptr> &stack, const vector<string> &spec);

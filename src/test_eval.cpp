@@ -30,43 +30,6 @@ TEST_CASE("Test extract argument") {
 }
 
 
-void check_stack_result(stack<Token::Ptr> &stack, const Token &expect) {
-    CHECK(stack.size() == 1);
-    auto tok = stack.top();
-    stack.pop();
-    CHECK(*tok == expect);
-}
-
-
-TEST_CASE("Test operator_add") {
-    stack<Token::Ptr> stk({make_shared<TokenInt>(1), make_shared<TokenInt>(2)});
-    operator_add(stk);
-    check_stack_result(stk, TokenInt(3));
-
-    stk.push(make_shared<TokenInt>(1));
-    stk.push(make_shared<TokenFloat>(2.0));
-    operator_add(stk);
-    check_stack_result(stk, TokenFloat(3.0));
-}
-
-
-TEST_CASE("Test operator_div") {
-    stack<Token::Ptr> stk({make_shared<TokenInt>(3), make_shared<TokenInt>(2)});
-    operator_div(stk);
-    check_stack_result(stk, TokenFloat(1.5));
-
-    stk.push(make_shared<TokenInt>(4));
-    stk.push(make_shared<TokenInt>(2));
-    operator_div(stk);
-    check_stack_result(stk, TokenInt(2));
-
-    stk.push(make_shared<TokenInt>(2));
-    stk.push(make_shared<TokenInt>(0));
-    operator_div(stk);
-    check_stack_result(stk, TokenFloat(std::numeric_limits<double>::infinity()));
-}
-
-
 vector<Token::Ptr> get_tokens(const string &str) {
     Tokenizer tokenizer;
     for (char ch : str) {
