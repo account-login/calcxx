@@ -19,24 +19,21 @@ public:
 
 
 /*
- * exp  -> ± xexp ± nexp |
- *         ± xexp |
- *         nexp
- * nexp -> xexp ± nexp |
- *         xexp
- * xexp -> lexp * xexp |
- *         lexp / xexp |
- *         lexp
+ * exp  -> ± xexp exp_cont
+ *       |   xexp exp_cont
+ * exp_cont -> [± xexp]*
+ * xexp -> lexp xexp_cont
+ * xpex_cont -> [* lexp]*
  * lexp -> ( exp ) | number
  */
 
 enum class ParserState {
     exp,
+    exp_cont,
     exp_signed,
     exp_end,
-    nexp,
-    nexp_end,
     xexp,
+    xexp_cont,
     xexp_end,
     lexp,
     lexp_rpar,
@@ -57,7 +54,6 @@ private:
 
     void mismatch(vector<TokenType> expects, Token::Ptr got);
     void enter_exp();
-    void enter_nexp();
     void enter_xexp();
     void enter_lexp();
     void grow_body();

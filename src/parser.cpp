@@ -22,52 +22,44 @@ void Parser::feed(Token::Ptr tok) {
             this->states.back() = ParserState::exp_signed;
             this->enter_xexp();
         } else {
-            this->states.pop_back();
-            this->enter_nexp();
+            this->states.back() = ParserState::exp_cont;
+            this->enter_xexp();
             this->feed(tok);
         }
     } else if (this->states.back() == ParserState::exp_signed) {
         this->grow_body();
+        this->states.back() = ParserState::exp_cont;
+        this->feed(tok);
+    } else if(this->states.back() == ParserState::exp_cont) {
         if (tok->type == TokenType::PLUS || tok->type == TokenType::MINUS) {
             Node::Ptr node = make_shared<Node>(tok);
             this->grow_head(node);
             this->states.back() = ParserState::exp_end;
-            this->enter_nexp();
+            this->enter_xexp();
         } else {
             this->states.pop_back();
             this->feed(tok);
         }
     } else if (this->states.back() == ParserState::exp_end) {
         this->grow_body();
-        this->states.pop_back();
+        this->states.back() = ParserState::exp_cont;
         this->feed(tok);
     } else if (this->states.back() == ParserState::xexp) {
+        this->states.back() = ParserState::xexp_cont;
+        this->feed(tok);
+    } else if (this->states.back() == ParserState::xexp_cont) {
         if (tok->type == TokenType::MULT || tok->type == TokenType::DIV) {
             Node::Ptr node = make_shared<Node>(tok);
             this->grow_head(node);
             this->states.back() = ParserState::xexp_end;
-            this->enter_xexp();
+            this->enter_lexp();
         } else {
             this->states.pop_back();
             this->feed(tok);
         }
     } else if (this->states.back() == ParserState::xexp_end) {
         this->grow_body();
-        this->states.pop_back();
-        this->feed(tok);
-    } else if (this->states.back() == ParserState::nexp) {
-        if (tok->type == TokenType::PLUS || tok->type == TokenType::MINUS) {
-            Node::Ptr node = make_shared<Node>(tok);
-            this->grow_head(node);
-            this->states.back() = ParserState::nexp_end;
-            this->enter_nexp();
-        } else {
-            this->states.pop_back();
-            this->feed(tok);
-        }
-    } else if (this->states.back() == ParserState::nexp_end) {
-        this->grow_body();
-        this->states.pop_back();
+        this->states.back() = ParserState::xexp_cont;
         this->feed(tok);
     } else if (this->states.back() == ParserState::lexp) {
         if (tok->type == TokenType::LPAR) {
@@ -104,11 +96,6 @@ void Parser::mismatch(vector<TokenType> expects, Token::Ptr got) {
 
 void Parser::enter_exp() {
     this->states.push_back(ParserState::exp);
-}
-
-void Parser::enter_nexp() {
-    this->states.push_back(ParserState::nexp);
-    this->enter_xexp();
 }
 
 void Parser::enter_xexp() {
