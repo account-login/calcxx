@@ -9,7 +9,7 @@ using std::make_shared;
 using std::string;
 
 
-void Parser::feed(Token::Ptr tok) {
+void Parser::feed(const Token::Ptr &tok) {
     if (this->states.empty()) {
         if (tok->type == TokenType::END) {
             assert(this->nodes.size() == 1);
@@ -84,7 +84,7 @@ void Parser::feed(Token::Ptr tok) {
     }
 }
 
-void Parser::mismatch(vector<TokenType> expects, Token::Ptr got) {
+void Parser::mismatch(vector<TokenType> expects, const Token::Ptr &got) {
     string expected_types;
     expected_types.reserve(expects.size());
     for (TokenType tt : expects) {

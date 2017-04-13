@@ -5,7 +5,7 @@
 #include "node.h"
 
 
-Token::Ptr eval_node(Node::Ptr node);
+Token::Ptr eval_node(const Node::Ptr &node);
 
 
 #endif //CALCXX_EVAL_AST_H

@@ -5,7 +5,6 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
-
 #include "eval.h"
 #include "operators.h"
 #include "utils.hpp"
@@ -35,7 +34,7 @@ static map<TokenType, int> g_operator_precedence = {
 };
 
 
-void TokensEvaluator::feed(Token::Ptr tok) {
+void TokensEvaluator::feed(const Token::Ptr &tok) {
     if (*tok == Token(TokenType::LPAR)) {
         this->ops.push(tok);
     } else if (tok->is_op()) {
@@ -99,7 +98,7 @@ void TokensEvaluator::reset() {
 }
 
 
-bool operator_lt(Token::Ptr op1, Token::Ptr op2) {
+bool operator_lt(const Token::Ptr &op1, const Token::Ptr &op2) {
     try {
         return g_operator_precedence.at(op1->type) < g_operator_precedence.at(op2->type);
     } catch (const out_of_range &) {

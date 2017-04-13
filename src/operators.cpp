@@ -20,7 +20,7 @@ map<TokenType, OperatorFunc> g_builtin_operator_table = {
 };
 
 
-static double token_to_num(Token::Ptr tok) {
+static double token_to_num(const Token::Ptr &tok) {
     auto ti = dynamic_pointer_cast<TokenInt>(tok);
     if (ti) {
         return ti->value;

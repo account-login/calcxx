@@ -16,12 +16,12 @@ using std::vector;
 
 
 vector<Token::Ptr> extract_argument(stack<Token::Ptr> &stack, const vector<string> &spec);
-bool operator_lt(Token::Ptr op1, Token::Ptr op2);
+bool operator_lt(const Token::Ptr &op1, const Token::Ptr &op2);
 
 
 class TokensEvaluator {
 public:
-    void feed(Token::Ptr tok);
+    void feed(const Token::Ptr &tok);
     Token::Ptr get_result();;
     void reset();
 

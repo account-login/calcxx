@@ -15,12 +15,12 @@ using std::transform;
 using std::vector;
 
 
-static bool is_value_type(Token::Ptr tok) {
+static bool is_value_type(const Token::Ptr &tok) {
     return tok->type == TokenType::INT || tok->type == TokenType::FLOAT;
 }
 
 
-Token::Ptr eval_node(Node::Ptr node) {
+Token::Ptr eval_node(const Node::Ptr &node) {
     if (is_value_type(node->token)) {
         return node->token;
     }

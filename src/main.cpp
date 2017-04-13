@@ -39,7 +39,7 @@ class AstEvaluator {
 public:
     AstEvaluator() {}
 
-    void feed(Token::Ptr tok) {
+    void feed(const Token::Ptr &tok) {
         this->parser.feed(tok);
     }
 

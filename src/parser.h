@@ -40,14 +40,14 @@ public:
     Parser() {
         this->enter_exp();
     }
-    void feed(Token::Ptr tok);
+    void feed(const Token::Ptr &tok);
     Node::Ptr get_result();
 
 private:
     vector<Node::Ptr> nodes;
     vector<ParserState> states;
 
-    void mismatch(vector<TokenType> expects, Token::Ptr got);
+    void mismatch(vector<TokenType> expects, const Token::Ptr &got);
     void enter_exp();
     void enter_xexp();
     void enter_lexp();
