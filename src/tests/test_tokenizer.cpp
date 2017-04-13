@@ -95,3 +95,34 @@ TEST_CASE("Test Tokenizer throw") {
     Tokenizer tokenizer;
     CHECK_THROWS_AS(tokenizer.feed('x'), TokenizerError);
 }
+
+
+TokenInt I(int64_t value) {
+    return TokenInt(value);
+}
+
+
+TokenFloat F(double value) {
+    return TokenFloat(value);
+}
+
+
+TEST_CASE("Test Tokenizer number") {
+    CHECK(*get_tokens("123")[0] == I(123));
+    CHECK(*get_tokens("1.2")[0] == F(1.2));
+    CHECK(*get_tokens(".2")[0] == F(.2));
+    CHECK(*get_tokens(".25")[0] == F(.25));
+    CHECK(*get_tokens("2.")[0] == F(2.0));
+    CHECK(*get_tokens("1e5")[0] == I(100000));
+    CHECK(*get_tokens("1e+5")[0] == I(100000));
+    CHECK(*get_tokens("1e50")[0] == F(1e50));
+    CHECK(*get_tokens("1.e5")[0] == F(1e5));
+    CHECK(*get_tokens("1e-1")[0] == F(1e-1));
+
+    CHECK_THROWS_AS(get_tokens("."), TokenizerError);
+    CHECK_THROWS_AS(get_tokens("1.2."), TokenizerError);
+    CHECK_THROWS_AS(get_tokens(".e5"), TokenizerError);
+    CHECK_THROWS_AS(get_tokens(".2."), TokenizerError);
+    CHECK_THROWS_AS(get_tokens("1e+"), TokenizerError);
+    CHECK_THROWS_AS(get_tokens("1e"), TokenizerError);
+}

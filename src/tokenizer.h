@@ -24,6 +24,9 @@ using std::queue;
 class State {
 public:
     virtual tuple<Token::Ptr, bool, State*> feed(char ch) = 0;
+
+protected:
+    tuple<Token::Ptr, bool, State*> keep_state();
 };
 
 
@@ -33,12 +36,30 @@ public:
 };
 
 
+enum class NumberSubState {
+    init,
+    int_digit,
+    dotted,
+    leading_dot,
+    exp,
+    exp_signed,
+    exp_digit,
+};
+
+
 class NumberState : public State {
 public:
     virtual tuple<Token::Ptr, bool, State*> feed(char ch);
 
 private:
-    string digits;
+    NumberSubState state = NumberSubState::init;
+    string int_digits;
+    string dot_digits;
+    string exp_digits;
+    int exp_sign = 1;
+    bool has_dot = false;
+
+    tuple<Token::Ptr, bool, State*> finish();
 };
 
 
