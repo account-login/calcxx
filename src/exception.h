@@ -15,34 +15,34 @@ protected:
     string msg;
 
 public:
-    BaseException(const string &msg = "BaseException") : msg(msg) {}
+    explicit BaseException(const string &msg = "BaseException") : msg(msg) {}
     virtual const char *what() const throw();
 };
 
 
 class TokenizerError : public BaseException {
 public:
-    TokenizerError(const string &msg) : BaseException(msg) {}
+    explicit TokenizerError(const string &msg) : BaseException(msg) {}
 };
 
 class ParserError : public BaseException {
 public:
-    ParserError(const string &msg) : BaseException(msg) {};
+    explicit ParserError(const string &msg) : BaseException(msg) {};
 };
 
 class EvalError : public BaseException {
 public:
-    EvalError(const string &msg) : BaseException(msg) {};
+    explicit EvalError(const string &msg) : BaseException(msg) {};
 };
 
 class ArgumentError : public EvalError {
 public:
-    ArgumentError(const string &msg) : EvalError(msg) {};
+    explicit ArgumentError(const string &msg) : EvalError(msg) {};
 };
 
 class NotImplementedOperation : public EvalError {
 public:
-    NotImplementedOperation(const string &msg) : EvalError(msg) {}
+    explicit NotImplementedOperation(const string &msg) : EvalError(msg) {}
 };
 
 #endif //CALCXX_EXCEPTION_H

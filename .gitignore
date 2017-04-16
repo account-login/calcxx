@@ -43,6 +43,6 @@
 *.pdb
 
 # TZ
-/build
+/build/*
 !/build/.git_keep
 /.plscache

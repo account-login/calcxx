@@ -61,8 +61,6 @@ void check_tokens_pos(const string &str, const vector<pair<SourcePos, SourcePos>
 
 
 TEST_CASE("Test Tokenizer source position") {
-    vector<Token::Ptr> tokens;
-
     check_tokens_pos("+", {{{0, 0}, {0, 0}}});
     check_tokens_pos("++", {
         {{0, 0}, {0, 0}},

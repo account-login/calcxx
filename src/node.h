@@ -22,7 +22,7 @@ struct Node {
     Token::Ptr token;
     Container children;
 
-    Node(Token::Ptr tok) : token(tok) {}
+    explicit Node(Token::Ptr tok) : token(tok) {}
     bool operator==(const Node &other) const;
     bool operator!=(const Node &other) const;
 };
